@@ -1,0 +1,50 @@
+
+body {
+  margin:0;
+  padding:0;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#board {
+ position: relative;
+ height: 100%;
+ width: 100%;
+}
+
+#bomber-wrapper {
+ position: absolute;
+ background-color: #8e8e8e;
+ height: 80px;
+ width: 100%;
+}
+
+#grass {
+ position: absolute;
+ background-color: #527E3D;
+ width: 100%;
+ top: 80px;
+ bottom: 60px;
+}
+
+#logo-wrapper {
+ position: absolute;
+ background-color: #000000;
+ height: 60px;
+ width: 100%;
+ bottom: 0;
+}
+
+  
+#player1 {
+  position:absolute;
+  content:url('images/bucket.png');
+  display:none;
+}
+
+#bomber {
+  position:absolute;
+  content:url('images/bomber-mad.png');
+  display:none;
+}
+  
