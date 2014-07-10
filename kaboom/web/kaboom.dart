@@ -47,7 +47,7 @@ class KaboomGame {
     _level = levelNum;
     
     // This is how many maximum bombs we'll drop on 
-    // this level. TODO : we should be recycling this...
+    // this level. TODO : we should be recycling these DOM elements
     _bombs = new List(levelNum * 4);
     for (int i=0; i<_bombs.length; i++)
       _bombs[i] = new Bomb();
@@ -81,6 +81,8 @@ class KaboomGame {
           // TODO bucket has cought a bomb!
           _score ++;
           window.console.log("score="+_score.toString());
+          // TODO : update the score UI
+          
           remove_bomb(bomb);
           numLive--;
         }
@@ -91,7 +93,6 @@ class KaboomGame {
     
     
     // Should we add another bomb falling?
-    //window.console.log(numLive.toString()+" live bombs");
     if (numLive < 4) {
       add_bomb();
     }
@@ -99,18 +100,14 @@ class KaboomGame {
     window.animationFrame.then(gameLoop);
   }
     
-    // Detach the DOM bomb from this
   void remove_bomb(Bomb bomb) {
-    //window.console.log("removing bomb");
     DivElement e = bomb._bomb;
     bomb._bomb = null;
     bomb.y = -1;
     
     _game_board.children.remove(e);    
-   // e.style.transform = 'transformY(0)';
   }
   
-  // add live bomb
   void add_bomb() {
     //window.console.log("adding bomb");
     Bomb newBomb;
@@ -124,7 +121,7 @@ class KaboomGame {
     
     Random r = new Random();
     
-    // add this bomb
+    // add bomb
     newBomb._bomb = new DivElement();
     newBomb.x = r.nextInt(_board_width);
     newBomb.y = 80;
