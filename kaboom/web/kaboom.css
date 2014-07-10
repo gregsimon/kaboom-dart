@@ -54,3 +54,7 @@ body {
   visibility:hidden;
 }
   
+.bomb {
+  content:url('images/bombh.png');
+  position:absolute;
+}
