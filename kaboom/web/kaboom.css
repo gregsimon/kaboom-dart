@@ -38,13 +38,19 @@ body {
   
 #player1 {
   position:absolute;
-  content:url('images/bucket.png');
-  display:none;
+  transform:translateZ(100);
+  transform-origin:50% 50%;
+  z-index:99;
+  bottom:120px;
+  content:url('images/bucketh.png');
+  visibility:hidden;
 }
 
 #bomber {
   position:absolute;
-  content:url('images/bomber-mad.png');
-  display:none;
+  top:22px;
+  z-index:99;
+  content:url('images/bomber-madh.png');
+  visibility:hidden;
 }
   
