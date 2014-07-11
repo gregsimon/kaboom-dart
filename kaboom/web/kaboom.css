@@ -19,6 +19,13 @@ body {
  width: 100%;
 }
 
+#score {
+  color:yellow;
+  font-size:24pt;
+  font-family:sans-serif;
+  text-align:center;
+}
+
 #grass {
  position: absolute;
  background-color: #527E3D;
@@ -57,4 +64,5 @@ body {
 .bomb {
   content:url('images/bomb1h.png');
   position:absolute;
+  transform:translate(-100px,-100px);
 }

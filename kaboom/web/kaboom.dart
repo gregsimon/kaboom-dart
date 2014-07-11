@@ -12,9 +12,11 @@ class KaboomGame {
   DivElement _game_board;
   DivElement _bomber;
   DivElement _player1;
+  DivElement _scoreElement;
   int _board_width = 0;
   int _player_pos = 0;
   int _game_board_height;
+  int _bucket_width;
   int _score;
   List _bombs;            // bombs for this level.
   double _bomb_speed;      // rate at whicht he bombs fall
@@ -25,13 +27,17 @@ class KaboomGame {
     _game_board = querySelector('#board');
     _player1 = querySelector('#player1');
     _bomber = querySelector('#bomber');
+    _scoreElement = querySelector('#score');
     
     _player1.style.visibility = 'visible';
     _bomber.style.visibility = 'visible';
     
     _board_width = _game_board.offsetWidth;
+    
     _game_board_height = _game_board.offsetHeight;
-    print("width=${_board_width} _game_board_height=${_game_board_height}");
+    _bucket_width = 16;
+    print("width=${_board_width} _game_board_height=${_game_board_height} bucket={$_bucket_width}");
+    
     
     // the bottom logo bar is also the touch controller surface
     querySelector('#logo-wrapper').onTouchStart.listen(process_finger);
@@ -76,8 +82,7 @@ class KaboomGame {
         if ( (bomb.y >= (_game_board_height-50)) && (bomb.x - _player_pos).abs() < 40) {
           // TODO bucket has cought a bomb!
           _score ++;
-          print("score="+_score.toString());
-          // TODO : update the score UI
+          _scoreElement.setInnerHtml("${_score}");
           
           remove_bomb(bomb);
           numLive--;
@@ -131,13 +136,13 @@ class KaboomGame {
   
   void process_finger(TouchEvent event) {
     event.preventDefault();
-    _player_pos = event.touches[0].page.x;
+    _player_pos = event.touches[0].page.x-(_bucket_width*2);
     _player1.style.transform = "translateX(${_player_pos}px)";
   }
   
   void process_mouse(MouseEvent event) {
     event.preventDefault();
-    _player_pos = event.clientX;
+    _player_pos = event.clientX - (_bucket_width*2);
     _player1.style.transform = "translateX(${_player_pos}px)";
   }
 
