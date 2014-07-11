@@ -4,12 +4,7 @@ import 'dart:math';
 KaboomGame game;
 
 class Bomb {
-  Bomb() {
-    x = -1;
-    y = -1;
-  }
-  
-  int x, y;
+  int x = -1, y = -1;
   DivElement _bomb;
 }
 
@@ -26,7 +21,7 @@ class KaboomGame {
   int _level;             // current level [1..]
   
   KaboomGame() {
-    window.console.log("KABOOM");
+    print("KABOOM");
     _game_board = querySelector('#board');
     _player1 = querySelector('#player1');
     _bomber = querySelector('#bomber');
@@ -36,11 +31,12 @@ class KaboomGame {
     
     _board_width = _game_board.offsetWidth;
     _game_board_height = _game_board.offsetHeight;
-    window.console.log("width=" + _board_width.toString()+"  _game_board_height="+_game_board_height.toString());
+    print("width=${_board_width} _game_board_height=${_game_board_height}");
     
     // the bottom logo bar is also the touch controller surface
     querySelector('#logo-wrapper').onTouchStart.listen(process_finger);
     querySelector('#logo-wrapper').onTouchMove.listen(process_finger);
+    querySelector('#logo-wrapper').onMouseMove.listen(process_mouse);
   }
   
   void changeLevel(int levelNum) {
@@ -67,7 +63,7 @@ class KaboomGame {
         // This bomb is on the gamebaord
         bomb.y += _bomb_speed.toInt();
         
-        bomb._bomb.style.transform = "translate("+bomb.x.toString()+"px,"+bomb.y.toString()+"px)";
+        bomb._bomb.style.transform = "translate(${bomb.x}px,${bomb.y}px)";
        
         // has bucket gone off the bottom?
         if (bomb.y >= _game_board_height) {
@@ -80,7 +76,7 @@ class KaboomGame {
         if ( (bomb.y >= (_game_board_height-50)) && (bomb.x - _player_pos).abs() < 40) {
           // TODO bucket has cought a bomb!
           _score ++;
-          window.console.log("score="+_score.toString());
+          print("score="+_score.toString());
           // TODO : update the score UI
           
           remove_bomb(bomb);
@@ -109,7 +105,7 @@ class KaboomGame {
   }
   
   void add_bomb() {
-    //window.console.log("adding bomb");
+    //print("adding bomb");
     Bomb newBomb;
     // find an open slot.
     for (Bomb bomb in _bombs) {
@@ -122,11 +118,12 @@ class KaboomGame {
     Random r = new Random();
     
     // add bomb
-    newBomb._bomb = new DivElement();
-    newBomb.x = r.nextInt(_board_width);
-    newBomb.y = 80;
-    newBomb._bomb.className = 'bomb';
-    newBomb._bomb.style.transform = 'translate(10px,'+newBomb.x.toString()+'px)';
+    newBomb
+      .._bomb = new DivElement()
+      ..x = r.nextInt(_board_width)
+      ..y = 80
+      .._bomb.className = 'bomb'
+      .._bomb.style.transform = 'translate(10px,'+newBomb.x.toString()+'px)';
     _game_board.children.add(newBomb._bomb);
     _bomber.style.transform = "transformX("+newBomb.x.toString()+"px)";
   }
@@ -135,11 +132,16 @@ class KaboomGame {
   void process_finger(TouchEvent event) {
     event.preventDefault();
     _player_pos = event.touches[0].page.x;
-    _player1.style.transform = "translateX("+ _player_pos.toString() +"px)";
+    _player1.style.transform = "translateX(${_player_pos}px)";
+  }
+  
+  void process_mouse(MouseEvent event) {
+    event.preventDefault();
+    _player_pos = event.clientX;
+    _player1.style.transform = "translateX(${_player_pos}px)";
   }
 
   void run() {
-    window.console.log("run");
     _score = 0;
     changeLevel(1);
     window.animationFrame.then(gameLoop);
@@ -147,9 +149,8 @@ class KaboomGame {
   
 }
 
-
-
 void main() {
+  print("MAIN");
   game = new KaboomGame();
   game.run();
 }
