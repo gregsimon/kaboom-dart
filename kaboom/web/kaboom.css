@@ -18,6 +18,7 @@ body {
  background-color: #8e8e8e;
  height: 80px;
  width: 100%;
+ transform:translateZ(0);
 }
 
 #score {
@@ -57,6 +58,7 @@ body {
   z-index:99;
   bottom:120px;
   content:url('images/bucketh.png');
+ transform:translateZ(0);
 }
 
 #bomber {
@@ -64,10 +66,12 @@ body {
   top:22px;
   z-index:99;
   content:url('images/bomber-madh.png');
+  transform:translateZ(0);
 }
   
 .bomb {
   content:url('images/bomb1h.png');
   position:absolute;
   transform:translate(-100px,-100px);
+  transform:translateZ(0);
 }

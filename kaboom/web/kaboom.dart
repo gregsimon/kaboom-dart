@@ -46,12 +46,21 @@ class KaboomGame {
   void changeLevel(int levelNum) {
     _level = levelNum;
     
-    // This is how many maximum bombs we'll drop on 
-    // this level. TODO : we should be recycling these DOM elements
+    // This is the max # of bombs on the screen for this
+    // level. We'll precreate them in the DOM so we don't 
+    // have to do this at runtime.
     _bombs = new List(levelNum * 4);
-    for (int i=0; i<_bombs.length; i++)
+    for (int i=0; i<_bombs.length; i++) {
       _bombs[i] = new Bomb();
-    
+      _bombs[i]
+            .._bomb = new DivElement()
+            ..x = _rng.nextInt(_board_width)
+            ..y = -100 // park it offscreen
+            .._bomb.className = 'bomb'
+            .._bomb.style.transform = "translate(${_bombs[i].x}px,-100px) translateZ(0)";
+      _game_board.children.add(_bombs[i]._bomb);
+    }
+
     _bomb_speed = levelNum * 4.5;
   }
 
@@ -67,7 +76,7 @@ class KaboomGame {
         // This bomb is on the gamebaord
         bomb.y += _bomb_speed.toInt();
         
-        bomb._bomb.style.transform = "translate(${bomb.x}px,${bomb.y}px)";
+        bomb._bomb.style.transform = "translate(${bomb.x}px,${bomb.y}px) translateZ(0)";
        
         // has bucket gone off the bottom?
         if (bomb.y >= _game_board_height) {
@@ -92,54 +101,43 @@ class KaboomGame {
     
     
     // Should we add another bomb falling?
-    if (numLive < 4)
+    if (numLive < _bombs.length)
       add_bomb();
     
     window.animationFrame.then(gameLoop);
   }
     
   void remove_bomb(Bomb bomb) {
-    bomb._bomb.style.transform = "transformY(-100px)";
-    _game_board.children.remove(bomb._bomb);    
-    bomb._bomb = null;
+    bomb._bomb.style.transform = "transformY(-100px) translateZ(0)";
     bomb.y = -1;
   }
   
   void add_bomb() {
-    Bomb newBomb;
     // find an open slot.
     for (Bomb bomb in _bombs) {
       if (bomb.y < 0) {
-        newBomb = bomb;
+        bomb
+          ..x = _rng.nextInt(_board_width)
+          ..y = 80
+          .._bomb.style.transform = "translate(${bomb.x}px,10px) translateZ(0)";
+        
+        _bomber.style.transform = "translateX(${bomb.x}px) translateZ(0)";
         break;
       }
-    }
-    
-    // TODO : animate the bomber to the new position
-
-    // Add bomb to the DOM
-    newBomb
-      .._bomb = new DivElement()
-      ..x = _rng.nextInt(_board_width)
-      ..y = 80
-      .._bomb.className = 'bomb'
-      .._bomb.style.transform = "translate(${newBomb.x}px,10px)";
-    _game_board.children.add(newBomb._bomb);
-    
-    _bomber.style.transform = "translateX(${newBomb.x}px";
+    }    
   }
 
   
   void process_finger(TouchEvent event) {
     event.preventDefault();
     _player_pos = event.touches[0].page.x-(_bucket_width*2);
-    _player1.style.transform = "translateX(${_player_pos}px)";
+    _player1.style.transform = "translateX(${_player_pos}px) translateZ(0)";
   }
   
   void process_mouse(MouseEvent event) {
     event.preventDefault();
     _player_pos = event.clientX - (_bucket_width*2);
-    _player1.style.transform = "translateX(${_player_pos}px)";
+    _player1.style.transform = "translateX(${_player_pos}px) translateZ(0)";
   }
 
   void run() {
