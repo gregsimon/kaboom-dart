@@ -78,7 +78,6 @@ class KaboomGame {
        
         // Do collision detection with bucket.
         if ( (bomb.y >= (_game_board_height-150)) && (bomb.x - _player_pos).abs() < 40) {
-          print("caught a bomb");
           // bucket has cought a bomb!
           _score++;
           _scoreElement.setInnerHtml("${_score}");
@@ -122,9 +121,8 @@ class KaboomGame {
       ..x = _rng.nextInt(_board_width)
       ..y = 80
       .._bomb.className = 'bomb'
-      .._bomb.style.transform = "translate(10px,${newBomb.x}px)";
+      .._bomb.style.transform = "translate(${newBomb.x}px,10px)";
     _game_board.children.add(newBomb._bomb);
-    _bomber.style.transform = "transformX(${newBomb.x}px)";
   }
 
   
