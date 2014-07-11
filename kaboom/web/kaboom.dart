@@ -115,6 +115,8 @@ class KaboomGame {
       }
     }
     
+    // TODO : animate the bomber to the new position
+
     // Add bomb to the DOM
     newBomb
       .._bomb = new DivElement()
@@ -123,6 +125,8 @@ class KaboomGame {
       .._bomb.className = 'bomb'
       .._bomb.style.transform = "translate(${newBomb.x}px,10px)";
     _game_board.children.add(newBomb._bomb);
+    
+    _bomber.style.transform = "translateX(${newBomb.x}px";
   }
 
   
