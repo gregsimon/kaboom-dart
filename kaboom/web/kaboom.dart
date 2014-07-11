@@ -21,6 +21,7 @@ class KaboomGame {
   List _bombs;            // bombs for this level.
   double _bomb_speed;      // rate at whicht he bombs fall
   int _level;             // current level [1..]
+  Random _rng = new Random();
   
   KaboomGame() {
     print("KABOOM");
@@ -28,9 +29,6 @@ class KaboomGame {
     _player1 = querySelector('#player1');
     _bomber = querySelector('#bomber');
     _scoreElement = querySelector('#score');
-    
-    _player1.style.visibility = 'visible';
-    _bomber.style.visibility = 'visible';
     
     _board_width = _game_board.offsetWidth;
     
@@ -79,9 +77,10 @@ class KaboomGame {
         }
        
         // Do collision detection with bucket.
-        if ( (bomb.y >= (_game_board_height-50)) && (bomb.x - _player_pos).abs() < 40) {
-          // TODO bucket has cought a bomb!
-          _score ++;
+        if ( (bomb.y >= (_game_board_height-150)) && (bomb.x - _player_pos).abs() < 40) {
+          print("caught a bomb");
+          // bucket has cought a bomb!
+          _score++;
           _scoreElement.setInnerHtml("${_score}");
           
           remove_bomb(bomb);
@@ -94,23 +93,20 @@ class KaboomGame {
     
     
     // Should we add another bomb falling?
-    if (numLive < 4) {
+    if (numLive < 4)
       add_bomb();
-    }
     
     window.animationFrame.then(gameLoop);
   }
     
   void remove_bomb(Bomb bomb) {
-    DivElement e = bomb._bomb;
+    bomb._bomb.style.transform = "transformY(-100px)";
+    _game_board.children.remove(bomb._bomb);    
     bomb._bomb = null;
     bomb.y = -1;
-    
-    _game_board.children.remove(e);    
   }
   
   void add_bomb() {
-    //print("adding bomb");
     Bomb newBomb;
     // find an open slot.
     for (Bomb bomb in _bombs) {
@@ -120,17 +116,15 @@ class KaboomGame {
       }
     }
     
-    Random r = new Random();
-    
-    // add bomb
+    // Add bomb to the DOM
     newBomb
       .._bomb = new DivElement()
-      ..x = r.nextInt(_board_width)
+      ..x = _rng.nextInt(_board_width)
       ..y = 80
       .._bomb.className = 'bomb'
-      .._bomb.style.transform = 'translate(10px,'+newBomb.x.toString()+'px)';
+      .._bomb.style.transform = "translate(10px,${newBomb.x}px)";
     _game_board.children.add(newBomb._bomb);
-    _bomber.style.transform = "transformX("+newBomb.x.toString()+"px)";
+    _bomber.style.transform = "transformX(${newBomb.x}px)";
   }
 
   
